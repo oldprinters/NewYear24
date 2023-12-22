@@ -1,5 +1,6 @@
 #include <FastLED.h>
 #include "ledik.h"
+#include "icicle.h"
  
 #define LED_PIN     4
 // #define NUM_LEDS    300
@@ -115,8 +116,8 @@ const TProgmemPalette16 myRedWhiteBluePalette_p PROGMEM =
 };
 //------------------------------
 const CRGBPalette16 ptrPal {
-    CRGB::AliceBlue,
-    CRGB::Azure,
+    CRGB::Amethyst,
+    CRGB::BlueViolet,
     CRGB::CadetBlue,
     CRGB::CornflowerBlue,
     
@@ -127,30 +128,32 @@ const CRGBPalette16 ptrPal {
     
     CRGB::DeepSkyBlue,
     CRGB::DodgerBlue,
-    CRGB::Gainsboro,
+    CRGB::DarkBlue,
     CRGB::Lavender,
 
-    CRGB::LightBlue,
+    CRGB::Indigo,
     CRGB::GhostWhite,
-    CRGB::LightSteelBlue,
-    CRGB::Silver
+    CRGB::MediumBlue,
+    CRGB::Navy
     
 };
 //---
 Ledik ledik(NUM_LEDS, 42, 1000);
-//------------------------------
+Icicle icicle(NUM_LEDS);
+Timer timer(6000);
+//-------------------------------------------------------------------------
 void setup() {
-    Serial.begin(115200);
     delay( 1500 ); // power-up safety delay
+    Serial.begin(115200);
     FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
     FastLED.setBrightness(  BRIGHTNESS );
     
     // currentPalette = RainbowColors_p;
     currentPalette = ptrPal;
     currentBlending = LINEARBLEND;
-
+    timer.setTimer();
 }
- 
+
 void ChangePalettePeriodically()
 {
     uint8_t secondHand = (millis() / 1000) % 60;
@@ -175,7 +178,6 @@ void ChangePalettePeriodically()
 void FillLEDsFromPaletteColors( uint8_t colorIndex)
 {
     const uint8_t brightness = 40;
-    // uint8_t brightness = 255;
     uint16_t lastIndex = 0;
     uint16_t k = 15;
     for( int i = 0; i < NUM_LEDS; ++i) {
@@ -186,26 +188,21 @@ void FillLEDsFromPaletteColors( uint8_t colorIndex)
         }
     }
 }
-//-----------------------------------------------------
-void star(){
-    leds[10] = CRGB::White;
-    leds[80] = CRGB::Red;
-    leds[145] = CRGB::Green;
-    leds[250] = CRGB::Yellow;
-}
 //----------------------------------------------------- 
 void loop()
 {
     // ChangePalettePeriodically();
-    
+    if(timer.getTimer()){
+        icicle.init(0);
+        timer.setTimer(16000);
+    }
     static uint8_t startIndex = 0;
     startIndex = startIndex + 1; /* motion speed */
     
-    FillLEDsFromPaletteColors( startIndex);
-    // star();
+    FillLEDsFromPaletteColors( startIndex );
     ledik.init();
     ledik.show(leds);
+    icicle.cycle(leds);
     FastLED.show();
     FastLED.delay(1000 / UPDATES_PER_SECOND);
 }
- 
