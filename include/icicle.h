@@ -3,6 +3,7 @@
 #include "Timer.h"
 #include <FastLED.h>
 
+#define ICICLE_STEP 20
 struct Spos {
     int8_t step;   //+-1
     int8_t source; //1 - начало, 0 - середина, -1 - конец
@@ -21,7 +22,7 @@ class Icicle: public Timer {
         Icicle(uint16_t nl, uint8_t sour);
         Icicle(uint16_t nl);
         bool cycle(CRGB*);   //возвращает true, если итерация завершена
-        void init(uint8_t sour);
+        void init(int8_t sour);
 };
 
 #endif //ICICLE_H

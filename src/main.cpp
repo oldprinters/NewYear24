@@ -126,13 +126,13 @@ const CRGBPalette16 ptrPal {
     CRGB::Blue,
     CRGB::DarkTurquoise,
     
-    CRGB::DeepSkyBlue,
+    CRGB::DarkSlateBlue,
     CRGB::DodgerBlue,
     CRGB::DarkBlue,
-    CRGB::Lavender,
+    CRGB::DarkGreen,
 
     CRGB::Indigo,
-    CRGB::GhostWhite,
+    CRGB::RoyalBlue,
     CRGB::MediumBlue,
     CRGB::Navy
     
@@ -193,8 +193,8 @@ void loop()
 {
     // ChangePalettePeriodically();
     if(timer.getTimer()){
-        icicle.init(0);
-        timer.setTimer(16000);
+        icicle.init(rand() % 3 - 1);
+        timer.setTimer(18000);
     }
     static uint8_t startIndex = 0;
     startIndex = startIndex + 1; /* motion speed */
